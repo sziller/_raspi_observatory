@@ -65,8 +65,7 @@ Small projects of mine such as this one; can be run four ways:
   * from editor: the way the editor ever executes a Python code
   * Desktop icon in /DesktopLauncher
 
-=== contact
-- Stuck?
 
-contact::
+=== contact
+
 - szillerke@gmail.com
