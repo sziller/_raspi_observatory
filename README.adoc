@@ -1,0 +1,87 @@
+# _raspi_observatory
+RaspberryPi mounted security camera with face recognition, smart building light and door-lock controller.
+
+== Welcome to my *Obsertatory* project
+This is a small Raspberry device handler, running an all round CLIENT device, placed on the perimeters
+of an apartment.
+Its tasks - as of now - are as follows:
+
+[NOTE]
+====
+This development is part of an all-around smart-home
+Project. +
+Being an Architect, my goal is to creare a smart home
+Manager fully controlled by the user. One that doesn't spy on you, does
+not collect your data, one that does not advertise you anything.
+And is free.
+====
+
+=== Tasks
+Summary of what present software is developed for.
+
+==== communication
+Tasks managed on remote server
+
+- sending Data to the Apartment server
+- receiving and executing global commands from the Apartment server
+
+==== local environment control
+Tasks that are locally relevant, controlling.
+
+- humidity adjustment
+
+==== measurement
+Monitoring the environment around the computer.
+
+- temperature
+- moisture
+- pressure
+- optical movement detection
+
+==== LED display
+Showing data locally on 8x8 LED display.
+Actually using the SenseHat display.
+Displayed data contains:
+
+- measurements
+- entertainment
+- small directional light
+- clock
+
+==== Peripherials
+Executing local or global commands sent to external
+hardware. Switching local devices connected over
+GPIO.
+
+- humidity
+- heating
+
+=== How do I get it set up?
+go to the install folder and run the `PackInst-roommanager.sh` bash file.
+To do so, enter:
+
+ sudo bash PackInst-roommanager.sh
+
+* Configuration: ...
+* Dependencies are installed automatically or install everithing in the _lib_ folder, by entering:
+
+ pip3 install <packagename>
+
+for each package found there. Most of them should be offline installable.
+
+* Once all your packages are installed, go to root, open up a terminal, and enter:
+
+ pytest
+
+run::
+Small projects of mine such as this one; can be run four ways:
+  * from terminal: `python3 App_RoomManager.py`
+  * from IDLE: App_RoomManager()
+  * from editor: the way the editor ever executes a Python code
+  * Desktop icon in /DesktopLauncher
+
+=== contact
+- Stuck?
+
+contact::
+- szillerke@gmail.com
