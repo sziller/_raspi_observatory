@@ -25,33 +25,21 @@ Tasks managed on remote server
 ==== local environment control
 Tasks that are locally relevant, controlling.
 
-- humidity adjustment
+- camera operation
+- image recognition
 
 ==== measurement
 Monitoring the environment around the computer.
 
-- temperature
-- moisture
-- pressure
 - optical movement detection
-
-==== LED display
-Showing data locally on 8x8 LED display.
-Actually using the SenseHat display.
-Displayed data contains:
-
-- measurements
-- entertainment
-- small directional light
-- clock
 
 ==== Peripherials
 Executing local or global commands sent to external
 hardware. Switching local devices connected over
-GPIO.
+GPIO or Camera slot
 
-- humidity
-- heating
+- lighting
+- camera control
 
 === How do I get it set up?
 go to the install folder and run the `PackInst-roommanager.sh` bash file.
@@ -72,8 +60,8 @@ for each package found there. Most of them should be offline installable.
 
 run::
 Small projects of mine such as this one; can be run four ways:
-  * from terminal: `python3 App_RoomManager.py`
-  * from IDLE: App_RoomManager()
+  * from terminal: `python3 App_Observatory.py`
+  * from IDLE: App_Observatory()
   * from editor: the way the editor ever executes a Python code
   * Desktop icon in /DesktopLauncher
 
