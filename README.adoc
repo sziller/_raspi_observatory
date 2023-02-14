@@ -1,7 +1,4 @@
-# _raspi_observatory
-RaspberryPi mounted security camera with face recognition, smart building light and door-lock controller.
-
-== Welcome to my *Obsertatory* project
+== Welcome to my *Observatory* project
 This is a small Raspberry device handler, running an all round CLIENT device, placed on the perimeters
 of an apartment.
 Its tasks - as of now - are as follows:
