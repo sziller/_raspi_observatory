@@ -90,8 +90,8 @@ class EngineObservatory:
             # Capture an image
             self.camera.capture_file('image_{}.jpg'.format(current_loop_count))
 
-            # Stop the preview
-            self.camera.stop_preview()
+            # # Stop the preview
+            # self.camera.stop_preview()
 
             time.sleep(10)
             if self.finite_looping: current_loop_count += 1
