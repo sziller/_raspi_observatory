@@ -50,7 +50,7 @@ class EngineObservatory:
         # Create a PiCamera object
         self.camera = Picamera2()
         self.cam_conf = self.camera.create_preview_configuration()
-        # self.camera.configure(self.cam_conf)
+        self.camera.configure(self.cam_conf)
         
         self.room_id: str                   = room_id
         self.finite_looping: int            = finite_looping  # 1- any int: actual int;
