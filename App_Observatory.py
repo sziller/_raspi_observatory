@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import logging
 import inspect
 import config as conf
-from engine_RoomManager import Engine_RoomManager as EnRM
+from engine_Observatory import Engine_Observatory as EnOb
 
 
 def app_observatory(**data_passed):
@@ -24,7 +24,7 @@ def app_observatory(**data_passed):
     lg.warning("          : ======================================")
     for p, a, in data_passed.items():
         lg.debug("{:>12}: {}".format(p, a))
-    EnRM.EngineRoomManager(**data_passed)
+    EnOb.EngineObservatory(**data_passed)
 
 
 if __name__ == "__main__":
@@ -70,12 +70,12 @@ if __name__ == "__main__":
     
     # Run App:
     
-    app_room_manager(finite_looping=app_loop_n_times,
-                     room_id=app_id,
-                     schedule=app_schedule,
-                     time_shift=app_time_shift,
-                     low_light=dsp_is_low_light,
-                     rotation=dsp_rotate,
-                     session_name=db_fullname,
-                     session_style=db_style
-                     )
+    app_observatory(finite_looping=app_loop_n_times,
+                    room_id=app_id,
+                    schedule=app_schedule,
+                    time_shift=app_time_shift,
+                    low_light=dsp_is_low_light,
+                    rotation=dsp_rotate,
+                    session_name=db_fullname,
+                    session_style=db_style
+                    )
