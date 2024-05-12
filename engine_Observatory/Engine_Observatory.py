@@ -79,21 +79,20 @@ class EngineObservatory:
             current_loop_count = 0
         else:
             current_loop_count = 1
+        # Add a delay to let the camera adjust to light levels
+        time.sleep(2)
         while current_loop_count <= self.finite_looping:
             lg.info("{:>4}/{:>4}".format(current_loop_count, self.finite_looping))
             # Start the preview (optional)
             # self.camera.start_preview(Preview.QTGL)
             
-            # Add a delay to let the camera adjust to light levels
-            time.sleep(2)
-
             # Capture an image
             self.camera.capture_file('image_{}.jpg'.format(current_loop_count))
 
             # # Stop the preview
             # self.camera.stop_preview()
 
-            time.sleep(10)
+            time.sleep(1)
             if self.finite_looping: current_loop_count += 1
         # Release the camera resources
         self.camera.close()
