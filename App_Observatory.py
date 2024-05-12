@@ -1,18 +1,39 @@
 """=== App-interface to start RoomManager Application. =======================================
 ============================================================================ by Sziller ==="""
-
+import multiprocessing
 import os
+import time
+
 from time_format import TimeFormat as TiFo
 from dotenv import load_dotenv
 import logging
 import inspect
 import config as conf
 from engine_Observatory import Engine_Observatory as EnOb
+from multiprocessing import Process
+from multiprocessing import Queue
+
+
+def app_messagehandler(**data_passed):
+    """=== Function name: app_messagehandler ===========================================================================
+    Use this code to run the Messaged handler!
+    ============================================================================================== by Sziller ==="""
+    cfn = inspect.currentframe().f_code.co_name  # current class name
+    lg.info("START: {:>85} <<<".format(cfn))
+    lg.warning("          : ======================================")
+    lg.warning({True: "          : =            LIVE SESSION            =",
+                False: "          : =            DEV  SESSION            ="}[conf.isLIVE])
+    lg.warning("          : ={:^36}=".format(__name__))
+    lg.info("          : =         user languange: {}         =".format(LNG))
+    lg.warning("          : ======================================")
+    while True:
+        time.sleep(2)
+        lg.info("process   : message handler")
 
 
 def app_observatory(**data_passed):
     """=== Function name: app_observatory ==============================================================================
-    Ust tihs code to run you Room Manager!
+    Use this code to run the Observatory Engine!
     ============================================================================================== by Sziller ==="""
     cfn = inspect.currentframe().f_code.co_name  # current class name
     lg.info("START: {:>85} <<<".format(cfn))
@@ -70,12 +91,22 @@ if __name__ == "__main__":
     
     # Run App:
     
-    app_observatory(finite_looping=app_loop_n_times,
-                    room_id=app_id,
-                    schedule=app_schedule,
-                    time_shift=app_time_shift,
-                    low_light=dsp_is_low_light,
-                    rotation=dsp_rotate,
-                    session_name=db_fullname,
-                    session_style=db_style
-                    )
+    queue_in = multiprocessing.Queue()
+    
+    args_obs = {
+        "queue": queue_in,
+        "finite_looping": app_loop_n_times,
+        "room_id": app_id,
+        "schedule": app_schedule,
+        "time_shift": app_time_shift,
+        "low_light": dsp_is_low_light,
+        "rotation": dsp_rotate,
+        "session_name": db_fullname,
+        "session_style": db_style}
+    args_msg = {}
+
+    process_observatory     = Process(target=app_observatory,       args=args_obs)
+    process_messagehandler  = Process(target=app_messagehandler,    args=args_msg)
+
+    process_observatory.start()
+    process_messagehandler.start()

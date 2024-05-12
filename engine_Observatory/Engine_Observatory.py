@@ -2,6 +2,7 @@ import os
 from picamera2 import Picamera2
 import inspect
 import time
+from multiprocessing import Queue
 
 from dotenv import load_dotenv
 import logging
@@ -25,6 +26,7 @@ class EngineObservatory:
     
     def __init__(self,
                  schedule: list,
+                 queue_in: (Queue, None)    = None,
                  finite_looping: int        = 20,
                  session_name: str          = "",
                  session_style: str         = "SQLite",
@@ -46,7 +48,8 @@ class EngineObservatory:
         if hcdd:  # if <hcdd> update is entered...
             self.hcdd_default.update(hcdd)  # updated the INSTANCE stored default!!!
         self.hcdd = self.hcdd_default
-
+        self.queue = queue_in
+        
         # Create a PiCamera object
         self.camera = Picamera2()
         self.cam_conf = self.camera.create_preview_configuration()
