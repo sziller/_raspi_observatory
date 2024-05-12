@@ -105,7 +105,7 @@ if __name__ == "__main__":
         "session_style": db_style}
     args_msg = {}
 
-    process_observatory     = Process(target=app_observatory,       args=args_obs)
+    process_observatory     = Process(target=app_observatory,       args=**args_obs)
     process_messagehandler  = Process(target=app_messagehandler,    args=args_msg)
 
     process_observatory.start()
