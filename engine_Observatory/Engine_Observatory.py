@@ -1,5 +1,5 @@
 import os
-import picamera
+from picamera import PiCamera
 import inspect
 import time
 
@@ -48,7 +48,7 @@ class EngineObservatory:
         self.hcdd = self.hcdd_default
 
         # Create a PiCamera object
-        self.camera = picamera.PiCamera()
+        self.camera = PiCamera()
         self.room_id: str                   = room_id
         self.finite_looping: int            = finite_looping  # 1- any int: actual int;
         self.low_light: bool                = low_light
