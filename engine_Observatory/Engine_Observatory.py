@@ -39,7 +39,7 @@ class EngineObservatory:
         # Use this section to define Hard Coded information to enable you to later modify these.
         # NOTE: this data CANNOT be modified at runtime.
         self.hcdd_default = {
-            "heartbeat": 20,
+            "heartbeat": 0.1,
             "delta_t_h": 0,
             "delta_t_m": 0,  # TB-R: _dict is appropriate name
             "err_msg_path": "./"}
@@ -92,7 +92,7 @@ class EngineObservatory:
             # # Stop the preview
             # self.camera.stop_preview()
 
-            time.sleep(1)
+            time.sleep(self.hcdd["heartbeat"])
             if self.finite_looping: current_loop_count += 1
         # Release the camera resources
         self.camera.close()
