@@ -1,5 +1,5 @@
 import os
-from picamera2 import Picamera2, Preview
+from picamera2 import Picamera2
 import inspect
 import time
 
@@ -51,6 +51,7 @@ class EngineObservatory:
         self.camera = Picamera2()
         self.cam_conf = self.camera.create_preview_configuration()
         self.camera.configure(self.cam_conf)
+        self.camera.start()
         
         self.room_id: str                   = room_id
         self.finite_looping: int            = finite_looping  # 1- any int: actual int;
@@ -82,7 +83,7 @@ class EngineObservatory:
             lg.info("{:>4}/{:>4}".format(current_loop_count, self.finite_looping))
             # Start the preview (optional)
             # self.camera.start_preview(Preview.QTGL)
-            self.camera.start()
+            
             # Add a delay to let the camera adjust to light levels
             time.sleep(2)
 
@@ -92,8 +93,7 @@ class EngineObservatory:
             # Stop the preview
             self.camera.stop_preview()
 
-            # Release the camera resources
-            self.camera.close()
             time.sleep(10)
             if self.finite_looping: current_loop_count += 1
-
+        # Release the camera resources
+        self.camera.close()
