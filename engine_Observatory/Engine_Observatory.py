@@ -68,12 +68,6 @@ class EngineObservatory:
         
         self.go()
 
-        
-
-        
-        
-        
-        
     def go(self):
         """=== Method name: go =========================================================================================
         ========================================================================================== by Sziller ==="""
@@ -87,7 +81,7 @@ class EngineObservatory:
             self.camera.start_preview()
 
             # Add a delay to let the camera adjust to light levels
-            self.camera.sleep(2)
+            time.sleep(2)
 
             # Capture an image
             self.camera.capture('image_{}.jpg'.format(current_loop_count))
