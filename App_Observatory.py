@@ -10,6 +10,7 @@ import logging
 import inspect
 import config as conf
 from engine_Observatory import Engine_Observatory as EnOb
+from engine_Observatory import Engine_MessageHandler as EnMH
 from multiprocessing import Process
 from multiprocessing import Queue
 
@@ -26,9 +27,7 @@ def app_messagehandler(**data_passed):
     lg.warning("          : ={:^36}=".format(__name__))
     lg.info("          : =         user languange: {}         =".format(LNG))
     lg.warning("          : ======================================")
-    while True:
-        time.sleep(2)
-        lg.info("process   : message handler")
+    EnMH.EngineMessageHandler(**data_passed)
 
 
 def app_observatory(**data_passed):
@@ -93,7 +92,7 @@ if __name__ == "__main__":
     
     queue_in = multiprocessing.Queue()
     
-    args_obs = {
+    kwargs_obs = {
         "queue": queue_in,
         "finite_looping": app_loop_n_times,
         "room_id": app_id,
@@ -103,10 +102,10 @@ if __name__ == "__main__":
         "rotation": dsp_rotate,
         "session_name": db_fullname,
         "session_style": db_style}
-    args_msg = {}
+    kwargs_msg = {}
 
-    process_observatory     = Process(target=app_observatory,       kwargs=args_obs)
-    process_messagehandler  = Process(target=app_messagehandler,    args=args_msg)
+    process_observatory     = Process(target=app_observatory,       kwargs=kwargs_obs)
+    process_messagehandler  = Process(target=app_messagehandler,    kwargs=kwargs_msg)
 
     process_observatory.start()
     process_messagehandler.start()
