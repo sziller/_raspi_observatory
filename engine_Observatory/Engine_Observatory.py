@@ -97,5 +97,6 @@ class EngineObservatory:
 
             time.sleep(self.hcdd["heartbeat"])
             if self.finite_looping: current_loop_count += 1
+        print("LOOP FINISHED!!!")
         # Release the camera resources
         self.camera.close()
