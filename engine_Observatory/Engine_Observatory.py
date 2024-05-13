@@ -137,7 +137,7 @@ class EngineObservatory:
                 lg.debug("{:>10}: {}".format(k, v))
             lg.info("Timestamp of   REQUEST: {:>60}".format(id_timestamp))
             actual_command = getattr(self, command)
-            actual_command(**self.actual_request.as_dict)
+            actual_command(**self.actual_request.as_dict())
             # self.actual_response = None
             # self.actual_response = msg.EngineToHub(timestamp=id_timestamp, payload={}, message="")  # message must be ""
             # actual_process_data = self.command_assignment.get(command)
