@@ -183,6 +183,7 @@ class EngineObservatory:
     def GET_photo(self, **kwargs):
         """=== Method name: GET_photo ==================================================================================
         ========================================================================================== by Sziller ==="""
+        self.camera.start()
         if kwargs:
             timestamp = "{}-".format(kwargs["timestamp"])
         else:
