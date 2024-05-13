@@ -190,13 +190,13 @@ class EngineObservatory:
             lg.info("{:>4}/{:>4}".format(current_loop_count, self.finite_looping))
             # Start the preview (optional)
             # self.camera.start_preview(Preview.QTGL)
-            current_filename = 'image_{}.jpg'.format(current_loop_count)
+            current_filename = './image_{}.jpg'.format(current_loop_count)
             # Capture an image
             self.camera.capture_file(current_filename)
             lg.debug("photo     : TAKEN and saved as {}".format(current_filename))
 
             # # Stop the preview
-            self.camera.stop_preview()
+            # self.camera.stop_preview()
 
             time.sleep(self.hcdd["heartbeat"])
             if self.finite_looping: current_loop_count += 1
