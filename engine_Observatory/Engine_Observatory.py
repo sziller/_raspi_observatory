@@ -56,12 +56,6 @@ class EngineObservatory:
         self.hcdd = self.hcdd_default
         self.queue_request = queue_server_to_engine
         
-        # Create a PiCamera object
-        self.camera = Picamera2()
-        self.cam_conf = self.camera.create_preview_configuration()
-        self.camera.configure(self.cam_conf)
-        self.camera.start()
-
         self.actual_request                 = None
         
         self.room_id: str                   = room_id
@@ -183,7 +177,11 @@ class EngineObservatory:
     def GET_photo(self, **kwargs):
         """=== Method name: GET_photo ==================================================================================
         ========================================================================================== by Sziller ==="""
-        self.camera.start()
+        # Create a PiCamera object
+        camera = Picamera2()
+        cam_conf = camera.create_preview_configuration()
+        camera.configure(cam_conf)
+        camera.start()
         if kwargs:
             timestamp = "{}-".format(kwargs["timestamp"])
         else:
@@ -199,7 +197,7 @@ class EngineObservatory:
             # self.camera.start_preview(Preview.QTGL)
             current_filename = './{}photo_{}.jpg'.format(timestamp, current_loop_count)
             # Capture an image
-            self.camera.capture_file(current_filename)
+            camera.capture_file(current_filename)
             lg.debug("photo     : TAKEN and saved as {}".format(current_filename))
 
             # # Stop the preview
@@ -209,5 +207,5 @@ class EngineObservatory:
             if self.finite_looping: current_loop_count += 1
         lg.info("photoloop : ")
         # Release the camera resources
-        self.camera.close()
+        camera.close()
         
