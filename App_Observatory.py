@@ -95,10 +95,10 @@ if __name__ == "__main__":
     
     # Run App:
     
-    queue_in = multiprocessing.Queue()
+    queue_server_to_engine = multiprocessing.Queue()
     
     kwargs_obs = {
-        "queue_in": queue_in,
+        "queue_server_to_engine": queue_server_to_engine,
         "finite_looping": app_loop_n_times,
         "room_id": app_id,
         "schedule": app_schedule,
@@ -107,7 +107,7 @@ if __name__ == "__main__":
         "rotation": dsp_rotate,
         "session_name": db_fullname,
         "session_style": db_style}
-    kwargs_msg = {"queue_in": queue_in,}
+    kwargs_msg = {"queue_server_to_engine": queue_server_to_engine,}
 
     process_observatory     = Process(target=app_observatory,       kwargs=kwargs_obs)
     process_messagehandler  = Process(target=app_messagehandler,    kwargs=kwargs_msg)

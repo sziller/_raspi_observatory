@@ -32,7 +32,7 @@ class EngineObservatory:
     
     def __init__(self,
                  schedule: list,
-                 queue_in: (Queue, None)    = None,
+                 queue_server_to_engine: (Queue, None)    = None,
                  finite_looping: int        = 20,
                  session_name: str          = "",
                  session_style: str         = "SQLite",
@@ -54,7 +54,7 @@ class EngineObservatory:
         if hcdd:  # if <hcdd> update is entered...
             self.hcdd_default.update(hcdd)  # updated the INSTANCE stored default!!!
         self.hcdd = self.hcdd_default
-        self.queue_request = queue_in
+        self.queue_request = queue_server_to_engine
         
         # Create a PiCamera object
         self.camera = Picamera2()
@@ -96,7 +96,8 @@ class EngineObservatory:
             if self.took_n_queued_last_loop:
                 self.process_actual_request()
             # check and empty directcall containing queue                               - ENDED -
-
+            time.sleep(self.hcdd["heartbeat"])
+            
     def pop_last_entry_from_queue_in(self):
         """=== Method name: pop_last_entry_from_queue_in =========================================
         Suggesting self.queue_request to include data, method takes last member.
@@ -136,7 +137,7 @@ class EngineObservatory:
                 lg.debug("{:>10}: {}".format(k, v))
             lg.info("Timestamp of   REQUEST: {:>60}".format(id_timestamp))
             actual_command = getattr(self, command)
-            actual_command()
+            actual_command(**self.actual_request.as_dict)
             # self.actual_response = None
             # self.actual_response = msg.EngineToHub(timestamp=id_timestamp, payload={}, message="")  # message must be ""
             # actual_process_data = self.command_assignment.get(command)
@@ -179,18 +180,23 @@ class EngineObservatory:
         # self.actual_response = None
         self.actual_request = None
 
-    def GET_photo(self):
+    def GET_photo(self, **kwargs):
+        """=== Method name: GET_photo ==================================================================================
+        ========================================================================================== by Sziller ==="""
+        if kwargs:
+            timestamp = "{}-".format(kwargs["timestamp"])
+        else:
+            timestamp = ""
         if not self.finite_looping:
             current_loop_count = 0
         else:
             current_loop_count = 1
-        # Add a delay to let the camera adjust to light levels
-        time.sleep(2)
+        time.sleep(2) # Add a delay to let the camera adjust to light levels
         while current_loop_count <= self.finite_looping:
             lg.info("{:>4}/{:>4}".format(current_loop_count, self.finite_looping))
             # Start the preview (optional)
             # self.camera.start_preview(Preview.QTGL)
-            current_filename = './image_{}.jpg'.format(current_loop_count)
+            current_filename = './{}photo_{}.jpg'.format(timestamp, current_loop_count)
             # Capture an image
             self.camera.capture_file(current_filename)
             lg.debug("photo     : TAKEN and saved as {}".format(current_filename))
@@ -200,7 +206,7 @@ class EngineObservatory:
 
             time.sleep(self.hcdd["heartbeat"])
             if self.finite_looping: current_loop_count += 1
-        print("LOOP FINISHED!!!")
+        lg.info("photoloop : ")
         # Release the camera resources
         self.camera.close()
         

@@ -1,4 +1,6 @@
-
+"""=== Message handler =========================================================
+Process to manage communication between Server API and Engine.
+============================================================== by Sziller ==="""
 
 import logging
 import inspect
@@ -19,7 +21,7 @@ class EngineMessageHandler:
     ccn = inspect.currentframe().f_code.co_name  # current class name
 
     def __init__(self,
-                 queue_in: (Queue, None) = None,
+                 queue_server_to_engine: (Queue, None) = None,
                  hcdd: (dict, None) = None,
                  **kwargs):
         lg.info("INIT : {:>85} <<<".format(self.ccn))
@@ -35,14 +37,15 @@ class EngineMessageHandler:
         self.socket = context.socket(zmq.REP)
         self.socket.bind("tcp://*:52902")
         
-        self.queue = queue_in
-        self.go()
+        self.queue = queue_server_to_engine
+        self.listen()
 
-    def go(self):
-        """=== Method name: go =========================================================================================
+    def listen(self):
+        """=== Method name: listen =====================================================================================
+        Method to listen to socket, and forward incomming requests into Engine queue
         ========================================================================================== by Sziller ==="""
         while True:
-            lg.debug("loopstart: go()")
+            lg.debug("loopstart: listen()")
             msg_router_to_engine: msg.InternalMsg           = self.socket.recv_pyobj()
             print("Received message from API: {}".format(msg_router_to_engine.payload))
             # Process the message
