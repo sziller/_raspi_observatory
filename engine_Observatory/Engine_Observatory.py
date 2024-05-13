@@ -57,10 +57,10 @@ class EngineObservatory:
         self.queue_request = queue_in
         
         # Create a PiCamera object
-        # self.camera = Picamera2()
-        # self.cam_conf = self.camera.create_preview_configuration()
-        # self.camera.configure(self.cam_conf)
-        # self.camera.start()
+        self.camera = Picamera2()
+        self.cam_conf = self.camera.create_preview_configuration()
+        self.camera.configure(self.cam_conf)
+        self.camera.start()
 
         self.actual_request                 = None
         
