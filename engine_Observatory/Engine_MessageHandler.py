@@ -1,20 +1,15 @@
-import os
-from picamera2 import Picamera2
-import inspect
-import time
-from multiprocessing import Queue
 
-from dotenv import load_dotenv
+
 import logging
+import inspect
+import zmq
+from multiprocessing import Queue
+from shmc_messages import msg
 
-from shmc_sqlAccess import SQL_interface as SQLi
-from shmc_sqlBases.sql_baseMeasurement import Measurement as sqlMeasurement
 
 # LOGGING                                                                                   logging - START -
 lg = logging.getLogger()
 # LOGGING                                                                                   logging - ENDED -
-
-load_dotenv()
 
 
 class EngineMessageHandler:
@@ -35,13 +30,25 @@ class EngineMessageHandler:
         if hcdd:  # if <hcdd> update is entered...
             self.hcdd_default.update(hcdd)  # updated the INSTANCE stored default!!!
         self.hcdd = self.hcdd_default
+
+        context = zmq.Context()
+        self.socket = context.socket(zmq.REP)
+        self.socket.bind("tcp://*:52902")
+        
         self.queue = queue_in
         self.go()
 
     def go(self):
         """=== Method name: go =========================================================================================
         ========================================================================================== by Sziller ==="""
-        lg.debug("loopstart: go()")
         while True:
-            time.sleep(5)
-            lg.info("process   : message handler")
+            lg.debug("loopstart: go()")
+            msg_router_to_engine: msg.InternalMsg           = self.socket.recv_pyobj()
+            print("Received message from API: {}".format(msg_router_to_engine.payload))
+            # Process the message
+            msg_engine_to_router = msg.ExternalResponseMsg(payload=None,
+                                                           message="request being processed",
+                                                           timestamp=msg_router_to_engine.timestamp)
+            self.socket.send_pyobj(msg_engine_to_router)
+
+            self.queue.put(msg_router_to_engine)

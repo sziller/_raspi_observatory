@@ -1,4 +1,9 @@
-"""=== App-interface to start RoomManager Application. =======================================
+"""=== App-interface to start Observatory Module =============================================
+Application starts two processes:
+- Observatory Engine
+- Message handler
+
+
 ============================================================================ by Sziller ==="""
 import multiprocessing
 import os
@@ -93,7 +98,7 @@ if __name__ == "__main__":
     queue_in = multiprocessing.Queue()
     
     kwargs_obs = {
-        "queue": queue_in,
+        "queue_in": queue_in,
         "finite_looping": app_loop_n_times,
         "room_id": app_id,
         "schedule": app_schedule,
@@ -102,7 +107,7 @@ if __name__ == "__main__":
         "rotation": dsp_rotate,
         "session_name": db_fullname,
         "session_style": db_style}
-    kwargs_msg = {}
+    kwargs_msg = {"queue_in": queue_in,}
 
     process_observatory     = Process(target=app_observatory,       kwargs=kwargs_obs)
     process_messagehandler  = Process(target=app_messagehandler,    kwargs=kwargs_msg)

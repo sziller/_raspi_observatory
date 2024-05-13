@@ -1,0 +1,3 @@
+pyzmq               # socket-like communication to engine processes
+pytest              # needed - to run tests
+sqlalchemy          # needed - for DB handling
