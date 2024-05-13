@@ -183,7 +183,7 @@ class EngineObservatory:
         camera.configure(cam_conf)
         camera.start()
         if kwargs:
-            timestamp = "{}-".format(kwargs["timestamp"])
+            timestamp = "{}-".format(int(kwargs["timestamp"]))
         else:
             timestamp = ""
         if not self.finite_looping:
