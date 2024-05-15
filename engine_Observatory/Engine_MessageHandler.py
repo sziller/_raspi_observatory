@@ -45,13 +45,15 @@ class EngineMessageHandler:
         Method to listen to socket, and forward incomming requests into Engine queue
         ========================================================================================== by Sziller ==="""
         while True:
-            lg.debug("loopstart: listen()")
+            lg.debug("new loop  : listen() - to socket still active after recent message")
             msg_router_to_engine: msg.InternalMsg           = self.socket.recv_pyobj()
-            print("Received message from API: {}".format(msg_router_to_engine.payload))
+            lg.info("received  : message from API over socket: {}".format(msg_router_to_engine.payload))
             # Process the message
             msg_engine_to_router = msg.ExternalResponseMsg(payload=None,
                                                            message="request being processed",
                                                            timestamp=msg_router_to_engine.timestamp)
             self.socket.send_pyobj(msg_engine_to_router)
-
+            lg.debug("sent      : response to API over socket: {}".format(msg_engine_to_router.payload))
+            
             self.queue.put(msg_router_to_engine)
+            lg.debug("put       : message into Queue for Engine: {}".format(msg_router_to_engine.payload))
