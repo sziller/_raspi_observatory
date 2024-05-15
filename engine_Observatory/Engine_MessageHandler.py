@@ -49,7 +49,7 @@ class EngineMessageHandler:
             msg_router_to_engine: msg.InternalMsg           = self.socket.recv_pyobj()
             lg.info("received  : message from API over socket: {}".format(msg_router_to_engine.payload))
             # Process the message
-            msg_engine_to_router = msg.ExternalResponseMsg(payload=None,
+            msg_engine_to_router = msg.ExternalResponseMsg(payload=msg_router_to_engine.payload,
                                                            message="request being processed",
                                                            timestamp=msg_router_to_engine.timestamp)
             self.socket.send_pyobj(msg_engine_to_router)
