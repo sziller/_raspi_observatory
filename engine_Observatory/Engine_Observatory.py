@@ -209,3 +209,20 @@ class EngineObservatory:
         # Release the camera resources
         camera.close()
         
+    def GET_send_message(self, **kwargs):
+        """=== Method name: GET_send_message ===========================================================================
+        ========================================================================================== by Sziller ==="""
+        cmn = inspect.currentframe().f_code.co_name  # current method name
+        lg.warning("implement : TBD: {}".format(cmn))
+    
+    def GET_full_db_data(self, **kwargs):
+        """=== Method name: GET_full_db_data ===========================================================================
+        ========================================================================================== by Sziller ==="""
+        cmn = inspect.currentframe().f_code.co_name  # current method name
+        lg.warning("implement : TBD: {}".format(cmn))
+    
+    def GET_basic_config(self, **kwargs):
+        """=== Method name: GET_basic_config ===========================================================================
+        ========================================================================================== by Sziller ==="""
+        cmn = inspect.currentframe().f_code.co_name  # current method name
+        lg.warning("implement : TBD: {}".format(cmn))
