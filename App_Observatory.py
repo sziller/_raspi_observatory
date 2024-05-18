@@ -2,8 +2,6 @@
 Application starts two processes:
 - Observatory Engine
 - Message handler
-
-
 ============================================================================ by Sziller ==="""
 import multiprocessing
 import os
@@ -58,7 +56,8 @@ if __name__ == "__main__":
     load_dotenv()
     # DB settings:
     db_fullname = os.getenv("DB_FULLNAME")
-    db_style = os.getenv("DB_STYLE") 
+    db_style = os.getenv("DB_STYLE")
+    zmq_port = os.getenv("ZMQ_PORT")
     # from config.py:
     # language settings:
     LNG                 = conf.LANGUAGE_CODE
@@ -95,10 +94,12 @@ if __name__ == "__main__":
     
     # Run App:
     
-    queue_server_to_engine = multiprocessing.Queue()
+    queue_hub_to_eng    = multiprocessing.Queue()
+    queue_eng_to_hub    = multiprocessing.Queue()
     
     kwargs_obs = {
-        "queue_server_to_engine": queue_server_to_engine,
+        "queue_hub_to_eng": queue_hub_to_eng,
+        "queue_eng_to_hub": queue_eng_to_hub,
         "finite_looping": app_loop_n_times,
         "room_id": app_id,
         "schedule": app_schedule,
@@ -107,10 +108,27 @@ if __name__ == "__main__":
         "rotation": dsp_rotate,
         "session_name": db_fullname,
         "session_style": db_style}
-    kwargs_msg = {"queue_server_to_engine": queue_server_to_engine,}
+    kwargs_msg = {"zmq_port": zmq_port,
+                  "queue_hub_to_eng": queue_hub_to_eng,
+                  "queue_eng_to_hub": queue_eng_to_hub}
 
     process_observatory     = Process(target=app_observatory,       kwargs=kwargs_obs)
     process_messagehandler  = Process(target=app_messagehandler,    kwargs=kwargs_msg)
 
     process_observatory.start()
     process_messagehandler.start()
+
+
+# zmq_port: int,
+#                  queue_hub_to_eng: Queue,
+#                  queue_eng_to_hub: Queue = None,
+#                  hcdd: dict or None      = None,
+#                  **kwargs):
+#         lg.info("INIT : {:>85} <<<".format(self.ccn))
+#         # setting Hard Coded Default Data and updating IF incoming argument can be used.
+#         # Use this section to define Hard Coded information to enable you to later modify these.
+#         # NOTE: this data CANNOT be modified at runtime.
+#         self.zmq_port: int          = zmq_port
+#         self.hcdd_default           = {"timeout": 5,
+#                                        "cpu_delay": 0.01,
+#                                        "err_msg_path": "./"}
