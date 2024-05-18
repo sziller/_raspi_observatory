@@ -15,7 +15,7 @@ import logging
 import inspect
 import config as conf
 from engine_Observatory import Engine_Observatory as EnOb
-from engine_Observatory import Engine_MessageHandler as EnMH
+from engine_Observatory import Engine_MessageHandlerHub as EnMH
 from multiprocessing import Process
 from multiprocessing import Queue
 

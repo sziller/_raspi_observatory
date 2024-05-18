@@ -32,15 +32,16 @@ class EngineObservatory:
     
     def __init__(self,
                  schedule: list,
-                 queue_server_to_engine: (Queue, None)    = None,
-                 finite_looping: int        = 20,
-                 session_name: str          = "",
-                 session_style: str         = "SQLite",
-                 room_id: str               = "room_01",
-                 time_shift: (dict, bool)   = False,
-                 low_light: bool            = True,
-                 rotation: int              = 180,
-                 hcdd: (dict, None)         = None,
+                 queue_hub_to_eng: Queue or None        = None,
+                 queue_eng_to_hub: Queue or None        = None,
+                 finite_looping: int                    = 20,
+                 session_name: str                      = "",
+                 session_style: str                     = "SQLite",
+                 room_id: str                           = "obsr",
+                 time_shift: (dict, bool)               = False,
+                 low_light: bool                        = True,
+                 rotation: int                          = 180,
+                 hcdd: (dict, None)                     = None,
                  **kwargs):
         lg.info("INIT : {:>85} <<<".format(self.ccn))
         # setting Hard Coded Default Data and updating IF incoming argument can be used.
@@ -54,7 +55,7 @@ class EngineObservatory:
         if hcdd:  # if <hcdd> update is entered...
             self.hcdd_default.update(hcdd)  # updated the INSTANCE stored default!!!
         self.hcdd = self.hcdd_default
-        self.queue_request = queue_server_to_engine
+        self.queue_hub_to_eng = queue_hub_to_eng
         
         self.actual_request                 = None
         
@@ -76,7 +77,6 @@ class EngineObservatory:
         self.schedule = schedule
 
         self.took_n_queued_last_loop: int        = 0
-        
         self.go()
 
     def go(self):
@@ -94,26 +94,26 @@ class EngineObservatory:
             
     def pop_last_entry_from_queue_in(self):
         """=== Method name: pop_last_entry_from_queue_in =========================================
-        Suggesting self.queue_request to include data, method takes last member.
+        Suggesting self.queue_hub_to_eng to include data, method takes last member.
         Last member is:
         - stored under self.actual_request
         - deleted from queue_in
-        If self.queue_request is empty on call, nothig happens, method passes.
+        If self.queue_hub_to_eng is empty on call, nothig happens, method passes.
         ___________ (by Instance we refer to the Instance of THIS very Class: DareEngine) ________________________________
         :var self.actual_request - dict      : the dict storing the actual <directcall> - updatable loop by loop.
                                                   This variable might be MODIFIED
-        :var self.queue_request - queue  : queue to pass data TO Instance. (from whatever source e.g.: UI
+        :var self.queue_hub_to_eng - queue  : queue to pass data TO Instance. (from whatever source e.g.: UI
                                                   This variable is READ (checked)
         :return nothing
         """
         cmn = inspect.currentframe().f_code.co_name  # current method name
         self.took_n_queued_last_loop = 0
-        if not self.queue_request.empty():  # only if Queue is not empty... having at least 1 element.
-            lg.info("QUEUE--in - <self.queue_request>: {} sees   {:>3} object.".format(cmn, self.queue_request.qsize()))
-            lg.info("QUEUE--in - <self.queue_request>: {} POPPING...".format(cmn))
-            self.actual_request = self.queue_request.get()  # <self.actual_request> takes first incoming obj
-            lg.info("QUEUE--in - <self.queue_request>: {} popped {:>3} object.".format(cmn, 1))
-            lg.info("QUEUE--in - <self.queue_request>: {} sees   {:>3} object.".format(cmn, self.queue_request.qsize()))
+        if not self.queue_hub_to_eng.empty():  # only if Queue is not empty... having at least 1 element.
+            lg.info("QUEUE--in - <self.queue_hub_to_eng>: {} sees   {:>3} object.".format(cmn, self.queue_hub_to_eng.qsize()))
+            lg.info("QUEUE--in - <self.queue_hub_to_eng>: {} POPPING...".format(cmn))
+            self.actual_request = self.queue_hub_to_eng.get()  # <self.actual_request> takes first incoming obj
+            lg.info("QUEUE--in - <self.queue_hub_to_eng>: {} popped {:>3} object.".format(cmn, 1))
+            lg.info("QUEUE--in - <self.queue_hub_to_eng>: {} sees   {:>3} object.".format(cmn, self.queue_hub_to_eng.qsize()))
             self.took_n_queued_last_loop = 1
         pass
 
