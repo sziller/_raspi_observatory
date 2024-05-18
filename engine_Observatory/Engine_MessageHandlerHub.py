@@ -1,5 +1,39 @@
 """=== Message handler =========================================================
-Process to manage communication between Server API and Engine.
+General process to manage communication between Server API and Engine.
+
+TLDR: Running parallel to Engine style daemons, MessageHandlerHub-s enable calling an Engine over an API.
+
+User-> Frontend -> API -> socket -> MessageHandler -> Queue -> Engine
+
+Depending on API's Endpoint setting, User requests are either synced of assync. The actual decision is made by the
+architecture: usually time-consuming physical tasks are handled asynchronously.
+
+Synchronized or Request-Response means:
+User's request is interpretted by (thus: programmed on) the Endpoint to wait for a response from the Engine.
+The Endpoint is not released until an Engine-processed response to the actual request can be returned. So the entire
+range between User and Engine is walked through forth and back.
+
+Assync or Fire and Forget means:
+User's request is interpretted by (thus: programmed on) the Endpoint to be time-consuming. The Endpoint receives an
+immediate answer from the Messanger, only confirming msg forwarding. Actual results will have to be requested either by
+the User on demand, or by the Frontend automatically.
+
+This module is designed to use in many of the Backend Engine setups.
+The intended way to set up SHMC is to have physical systems interacted with dedicated RaspberryPi computers.
+Each of these computers run as many Engines as necessary, and each of these Engines can be interacted with
+over the SHMC central server.
+Engines are quite independent, so they can run without network interaction on their own.
+In fact most of the Engines are designed to handle physical induts and outputs as a background process.
+
+Technology:
+As Queue(s) between Engine and Handler must be set up in a common and higher scope, we run the MessageHandler as a
+multiprocessing.Process, while - at the same time - we Instantiate the Engine.
+This happens in the App_* framework.
+This enables a remote server to connect to the socket if necessary. However, the Engine can run locally, even be
+interacted with in daemon style.
+
+Any remote Server can send its requests via the Socket.
+Engines are turned on/off manually. (e.g. over direct ssh connection)
 ============================================================== by Sziller ==="""
 
 import time
